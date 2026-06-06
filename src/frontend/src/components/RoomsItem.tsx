@@ -166,7 +166,7 @@ export const RoomsItem: React.FC<Props> = ({
             <PencilLine size={20} />
             Rename
           </li>
-          <Modal isOpen={modal} onClose={() => setModal(true)}>
+          <Modal isOpen={modal} onClose={() => setModal(false)}>
             <RoomModal
               title="Rename room"
               subtitle="New room name"
@@ -186,7 +186,7 @@ export const RoomsItem: React.FC<Props> = ({
             <Trash size={20} color="red" />
             Delete
           </li>
-          <Modal isOpen={deleteModal} onClose={() => setModal(false)}>
+          <Modal isOpen={deleteModal} onClose={() => setDeleteModal(false)}>
             <DeleteRoomModal
               title="Delete room"
               subtitle="Are you sure you want to delete this room? This action cannot be undone."

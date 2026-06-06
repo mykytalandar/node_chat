@@ -1,4 +1,4 @@
-import { UsernameForm } from "../components/UsernameForm";
+import { UsernameForm } from '../components/UsernameForm';
 
 export const JoinPage: React.FC = () => {
   return (
@@ -6,4 +6,4 @@ export const JoinPage: React.FC = () => {
       <UsernameForm />
     </div>
   );
-}
+};

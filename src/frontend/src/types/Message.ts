@@ -2,6 +2,6 @@ export type Message = {
   user: string;
   text: string;
   createdAt: Date;
-  id: string;
+  id: number;
   type: 'user' | 'system';
 };

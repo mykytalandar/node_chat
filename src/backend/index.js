@@ -8,6 +8,7 @@ import { createSystemMessage } from './utils/createSystemMessage.js';
 const app = express();
 
 app.use(express.json());
+
 app.use(
   cors({
     origin: process.env.CLIENT_HOST,
@@ -45,7 +46,7 @@ emmiter.on('SET_USERNAME', ({ client, payload }) => {
 
 emmiter.on('CREATE_ROOM', ({ client, payload }) => {
   const newRoom = {
-    id: rooms.length + 1,
+    id: Date.now(),
     name: payload.roomName,
     messages: [],
     users: [client.username],
@@ -76,7 +77,7 @@ emmiter.on('CREATE_ROOM', ({ client, payload }) => {
 });
 
 emmiter.on('JOIN_ROOM', ({ client, payload }) => {
-  const room = rooms.find((room) => room.id === payload.roomId);
+  const room = rooms.find((r) => r.id === payload.roomId);
 
   if (!room) {
     return;
@@ -88,7 +89,9 @@ emmiter.on('JOIN_ROOM', ({ client, payload }) => {
 
   room.users.push(client.username);
 
-  const systemMessage = createSystemMessage(`${client.username} joined the room`);
+  const systemMessage = createSystemMessage(
+    `${client.username} joined the room`,
+  );
 
   room.messages.push(systemMessage);
 
@@ -105,7 +108,7 @@ emmiter.on('JOIN_ROOM', ({ client, payload }) => {
 });
 
 emmiter.on('RENAME_ROOM', ({ client, payload }) => {
-  const room = rooms.find((room) => room.id === payload.roomId);
+  const room = rooms.find((r) => r.id === payload.roomId);
 
   if (!room || payload.userId !== room.creatorId) {
     return;
@@ -113,7 +116,9 @@ emmiter.on('RENAME_ROOM', ({ client, payload }) => {
 
   room.name = payload.newName;
 
-  const systemMessage = createSystemMessage(`${client.username} changed the chat name to ${payload.newName}`);
+  const systemMessage = createSystemMessage(
+    `${client.username} changed the chat name to ${payload.newName}`,
+  );
 
   room.messages.push(systemMessage);
 
@@ -130,7 +135,7 @@ emmiter.on('RENAME_ROOM', ({ client, payload }) => {
 });
 
 emmiter.on('DELETE_ROOM', ({ client, payload }) => {
-  const room = rooms.find((room) => room.id === payload.roomId);
+  const room = rooms.find((r) => r.id === payload.roomId);
 
   if (!room || payload.userId !== room.creatorId) {
     return;
@@ -151,7 +156,7 @@ emmiter.on('DELETE_ROOM', ({ client, payload }) => {
 });
 
 emmiter.on('SEND_MESSAGE', ({ client, payload }) => {
-  const room = rooms.find((room) => room.id === payload.roomId);
+  const room = rooms.find((r) => r.id === payload.roomId);
 
   if (!room) {
     return;
@@ -182,7 +187,6 @@ emmiter.on('SEND_MESSAGE', ({ client, payload }) => {
 });
 
 wss.on('connection', (client) => {
-
   client.on('message', (data) => {
     const message = JSON.parse(data);
 

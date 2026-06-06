@@ -31,7 +31,10 @@ export const DeleteRoomModal: React.FC<Props> = ({
         >
           Cancel
         </button>
-        <button className="form-button modal-button  modal-button-delete" onClick={onSubmit}>
+        <button
+          className="form-button modal-button  modal-button-delete"
+          onClick={onSubmit}
+        >
           {buttonText}
         </button>
       </div>

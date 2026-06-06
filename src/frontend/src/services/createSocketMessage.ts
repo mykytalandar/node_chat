@@ -16,12 +16,12 @@ type SocketMessages = {
     roomId: number;
     newName: string;
     userId: number;
-  }
+  };
 
   DELETE_ROOM: {
     roomId: number;
     userId: number;
-  }
+  };
 
   SEND_MESSAGE: {
     roomId: number;

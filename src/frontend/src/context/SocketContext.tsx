@@ -18,7 +18,7 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
   const [socket] = useState(() => socketService.connect());
 
   const value = {
-    socket
+    socket,
   };
 
   return (

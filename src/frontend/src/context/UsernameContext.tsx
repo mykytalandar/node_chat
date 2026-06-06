@@ -4,7 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 type UsernameContextType = {
   username: string | null;
   setUsername: React.Dispatch<React.SetStateAction<string | null>>;
-  usernameId: number | null,
+  usernameId: number | null;
   setUsernameId: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
