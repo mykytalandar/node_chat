@@ -29,6 +29,7 @@ export const RoomsList: React.FC<Props> = ({
   const [error, setError] = useState('');
   const { socket } = useContext(SocketContext);
   const { usernameId } = useContext(UsernameContext);
+  const [openedMenuRoomId, setOpenedMenuRoomId] = useState<number | null>(null);
 
   const handleCloseModal = () => {
     setError('');
@@ -65,6 +66,8 @@ export const RoomsList: React.FC<Props> = ({
     handleCloseModal();
   };
 
+  console.log(rooms);
+  
   return (
     <div className="chat-rooms-list">
       <div className="rooms-list-container">
@@ -119,6 +122,8 @@ export const RoomsList: React.FC<Props> = ({
                 key={room.id}
                 currentRoom={currentRoom}
                 onSetCurrentRoomId={onSetCurrentRoomId}
+                openedMenuRoomId={openedMenuRoomId}
+                setOpenedMenuRoomId={setOpenedMenuRoomId}
               />
             ))}
         </ul>

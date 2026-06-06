@@ -45,7 +45,6 @@ export const MessageForm: React.FC<Props> = ({ currentRoom }) => {
       <button
         className="message-button"
         type="submit"
-        onClick={() => handleSubmit}
       >
         <Send color="white" size={16} />
       </button>

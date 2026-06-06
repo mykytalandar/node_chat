@@ -2,6 +2,7 @@ import { EllipsisVertical, Hash, PencilLine, Trash } from 'lucide-react';
 import type { Room } from '../types/Room';
 import {
   useContext,
+  useEffect,
   useState,
   type Dispatch,
   type SetStateAction,
@@ -17,20 +18,27 @@ type Props = {
   room: Room;
   currentRoom: Room | null;
   onSetCurrentRoomId: Dispatch<SetStateAction<number | null>>;
+  openedMenuRoomId: number | null;
+  setOpenedMenuRoomId: Dispatch<SetStateAction<number | null>>;
 };
 
 export const RoomsItem: React.FC<Props> = ({
   room,
   currentRoom,
   onSetCurrentRoomId,
+  openedMenuRoomId,
+  setOpenedMenuRoomId,
 }) => {
   const { username, usernameId } = useContext(UsernameContext);
   const { socket } = useContext(SocketContext);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [modal, setModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [value, setValue] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    setOpenedMenuRoomId(null);
+  }, [currentRoom, setOpenedMenuRoomId]);
 
   if (!username) {
     return;
@@ -40,6 +48,7 @@ export const RoomsItem: React.FC<Props> = ({
   const isJoined = room.users.includes(username);
   const isCreator = room.creatorId === usernameId;
   const canManageRoom = isCreator && isCurrentRoom;
+  const isMenuOpen = openedMenuRoomId === room.id;
 
   const handleJoin = () => {
     const message = createSocketMessage('JOIN_ROOM', {
@@ -73,6 +82,10 @@ export const RoomsItem: React.FC<Props> = ({
     setDeleteModal(false);
   };
 
+  const handleToggleMenu = () => {
+    setOpenedMenuRoomId(openedMenuRoomId === room.id ? null : room.id);
+  };
+
   const handleRenameRoom = () => {
     const normalizedValue = value.trim();
 
@@ -99,11 +112,10 @@ export const RoomsItem: React.FC<Props> = ({
     socket.send(message);
 
     handleCloseModal();
-    setIsMenuOpen(false);
+    setOpenedMenuRoomId(null);
   };
 
   const handleDeleteRoom = () => {
-
     if (!usernameId) {
       return;
     }
@@ -120,7 +132,7 @@ export const RoomsItem: React.FC<Props> = ({
     socket.send(message);
 
     handleCloseDeleteModal();
-    setIsMenuOpen(false);
+    setOpenedMenuRoomId(null);
   };
 
   return (
@@ -139,14 +151,14 @@ export const RoomsItem: React.FC<Props> = ({
             {canManageRoom && (
               <button
                 className="rooms-item-manage-button"
-                onClick={() => setIsMenuOpen((prev) => !prev)}
+                onClick={handleToggleMenu}
               >
                 <EllipsisVertical size={18} />
               </button>
             )}
           </>
         ) : (
-          <div className={` ${isCurrentRoom ? 'none' : ''}`}>
+          <>
             {isJoined ? (
               <button className="rooms-item-button">Open</button>
             ) : (
@@ -154,7 +166,7 @@ export const RoomsItem: React.FC<Props> = ({
                 Join
               </button>
             )}
-          </div>
+          </>
         )}
       </li>
       {isMenuOpen && (
